@@ -1,0 +1,225 @@
+/**
+ * Challenge Component Styles
+ * Challenge header, selector, and list
+ */
+
+/* ============================================
+   CHALLENGE HEADER
+   ============================================ */
+.challenge-header {
+  flex-shrink: 0;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.challenge-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.challenge-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+}
+
+.challenge-badge {
+  padding: 0.2rem 0.5rem;
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-border);
+}
+
+.challenge-title {
+  font-family: var(--font-sans);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.challenge-objective {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+}
+
+.challenge-meta {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.challenge-stat {
+  text-align: right;
+}
+
+.challenge-stat-value {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.challenge-stat-label {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+/* ============================================
+   CHALLENGE SELECTOR
+   ============================================ */
+.challenge-selector {
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-surface);
+}
+
+.challenge-selector-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2rem;
+  padding: 0.875rem 2rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.challenge-selector-toggle:hover {
+  background: var(--bg-hover);
+}
+
+.challenge-selector-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+.challenge-selector-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+}
+
+.challenge-selector-current {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.challenge-selector-stats {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-left: auto;
+}
+
+.challenge-selector-stat {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.challenge-selector-stat-value {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.challenge-selector-stat-label {
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.challenge-list {
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.challenge-list-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 2rem;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  font-family: var(--font-mono);
+}
+
+.challenge-list-item:last-child {
+  border-bottom: none;
+}
+
+.challenge-list-item:hover:not(.locked) {
+  background: var(--bg-hover);
+}
+
+.challenge-list-item.active {
+  background: var(--accent-dim);
+  border-left: 2px solid var(--accent);
+}
+
+.challenge-list-item.locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.challenge-list-item-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.challenge-list-item-name {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.challenge-list-item.active .challenge-list-item-name {
+  color: var(--text-primary);
+}
+
+.challenge-list-item-difficulty {
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.challenge-list-item-lock {
+  color: var(--text-muted);
+}
+
+.challenge-list-item-soon {
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.2rem 0.5rem;
+  background: var(--bg-elevated);
+  border: 1px dashed var(--border-default);
+  color: var(--text-tertiary);
+}

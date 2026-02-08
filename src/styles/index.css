@@ -1,0 +1,19 @@
+/**
+ * Playground Styles
+ * Main entry point for all application styles
+ */
+
+/* External imports */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
+
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@import "tailwindcss";
+
+/* Internal styles (order matters) */
+@import './tokens.css';
+@import './base.css';
+@import './layout.css';
+@import './components/index.css';

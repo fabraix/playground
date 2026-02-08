@@ -1,0 +1,44 @@
+/**
+ * Design Tokens
+ * CSS custom properties for consistent theming
+ */
+
+:root {
+  --radius: 0;
+
+  /* Backgrounds */
+  --bg: #0a0a0b;
+  --bg-surface: #111113;
+  --bg-elevated: #161618;
+  --bg-hover: #1c1c1f;
+
+  /* Text hierarchy */
+  --text-primary: #fafafa;
+  --text-secondary: rgba(255, 255, 255, 0.65);
+  --text-tertiary: rgba(255, 255, 255, 0.4);
+  --text-muted: rgba(255, 255, 255, 0.25);
+
+  /* Accent - muted amber (used sparingly) */
+  --accent: #D08B5B;
+  --accent-dim: rgba(208, 139, 91, 0.12);
+  --accent-border: rgba(208, 139, 91, 0.3);
+
+  /* Status colors */
+  --status-safe: #22c55e;
+  --status-safe-dim: rgba(34, 197, 94, 0.12);
+  --status-blocked: #ef4444;
+  --status-blocked-dim: rgba(239, 68, 68, 0.12);
+
+  /* Borders */
+  --border: rgba(255, 255, 255, 0.06);
+  --border-default: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.12);
+
+  /* Fonts */
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Timing */
+  --transition-fast: 150ms;
+  --transition-normal: 200ms;
+}

@@ -1,0 +1,232 @@
+/**
+ * Layout Styles
+ * App structure, navigation, and responsive breakpoints
+ */
+
+/* ============================================
+   APP LAYOUT
+   ============================================ */
+.app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.main-layout {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.left-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+  border-right: 1px solid var(--border);
+}
+
+/* Legacy class for backwards compat */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.panels {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+.nav {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid var(--border);
+  background: rgba(10, 10, 11, 0.85);
+  backdrop-filter: blur(12px);
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.logo {
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.2em;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-link {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-tertiary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.nav-link:hover {
+  color: var(--text-secondary);
+}
+
+.nav-cta {
+  padding: 0.6rem 1.5rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border: 1px solid var(--border-default);
+  transition: all var(--transition-fast);
+}
+
+.nav-cta:hover {
+  background: var(--text-primary);
+  color: var(--bg);
+  border-color: var(--text-primary);
+}
+
+.mobile-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.mobile-menu-btn:hover {
+  color: var(--text-primary);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1024px) {
+  .panel-analysis {
+    width: 320px;
+  }
+
+  .challenge-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .challenge-meta {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-layout {
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+
+  .left-column {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    border-right: none;
+    overflow-x: hidden;
+  }
+
+  .nav-link {
+    display: none;
+  }
+
+  .mobile-menu-btn {
+    display: flex;
+    margin-left: -0.75rem;
+  }
+
+  .challenge-meta {
+    display: none;
+  }
+
+  .nav {
+    padding: 0.75rem 1rem;
+  }
+
+  .challenge-selector-toggle {
+    padding: 0.75rem 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .challenge-selector-left {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .challenge-selector-stats {
+    display: none;
+  }
+
+  .challenge-header {
+    padding: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .challenge-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .challenge-label {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .chat-input-area {
+    padding: 1rem;
+  }
+
+  .chat-messages {
+    padding: 1rem;
+  }
+
+  .message {
+    max-width: 90%;
+  }
+
+  .processing-steps {
+    max-width: 100%;
+  }
+
+  .initial-loading {
+    max-width: 100%;
+  }
+}

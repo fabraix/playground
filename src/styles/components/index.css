@@ -1,0 +1,8 @@
+/**
+ * Component Styles Index
+ * Imports all component-specific stylesheets
+ */
+
+@import './challenge.css';
+@import './chat.css';
+@import './analysis.css';
