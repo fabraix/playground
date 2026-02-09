@@ -1,73 +1,32 @@
-# Contributing to Fabraix Playground
+# Contributing
 
-## Challenge Ideas
+The main way to contribute is by proposing challenges for the community to play.
 
-Every week, the most upvoted community challenge idea goes live on the playground. Here's how it works:
+## Propose a challenge
 
-### Proposing a Challenge
+Open an issue using the **Challenge Proposal** template. Describe the agent scenario, what the player needs to accomplish, and what makes the defense interesting to break.
 
-1. Open an issue using the **Challenge Proposal** template
-2. Include the following in your proposal:
-   - **Name** — a catchy title for the challenge
-   - **Difficulty** — your estimate on a 1-5 scale
-   - **Description** — what the agent does and what makes it interesting
-   - **Objective** — what the player needs to accomplish (extract a secret, bypass a filter, trick the agent into doing something, etc.)
-   - **Defense mechanism** — how the agent is guarded (high-level, no need for the full prompt)
-   - **Why it's interesting** — what makes this challenge unique or educational
-3. The community votes using reactions on the issue
+The community votes with reactions. Each week, we review the top-voted proposals and the winning idea is considered to go live. If your challenge is selected, you get credited.
 
-### Selection Process
+Good challenges share a few qualities: a clear objective, a defense that's hard to bypass but not impossible, and multiple plausible attack vectors. The best ones teach something new — a prompt injection technique that hasn't been widely explored, an abuse of tool access, a social engineering angle that feels genuinely clever.
 
-- Each week, we review the most upvoted challenge proposals
-- The top-voted proposal that meets our guidelines gets considered for the next week
-- We build and deploy the challenge for the following week
-- The issue author gets credited in the challenge
+Don't hold back on creativity. The more novel the attack surface, the more interesting it is for everyone.
 
-### Challenge Guidelines
+## Suggest agent capabilities
 
-- **Be creative** — novel attack surfaces are more interesting than variations of existing challenges
-- **Make it solvable** — challenges should be difficult but not impossible
-- **Keep it educational** — the best challenges teach something about AI security
-- **No offensive content** — keep challenges professional and respectful
-- **Think about difficulty honestly** — a challenge that's trivially solvable isn't fun, but neither is one that requires pure luck
+The playground agent has access to tools like web search, document retrieval, and browsing. We're expanding this over time and want to hear what would make challenges more interesting. We want to build the Playground agent into a truly general-purpose agent.
 
-### What Makes a Good Challenge?
+Have an idea for a new tool, behavior, or game mechanic? Open an issue using the **Agent Idea** template.
 
-- A clear, well-defined objective
-- An interesting defense mechanism to bypass
-- Multiple possible attack vectors
-- A creative agent persona or scenario
-- Educational value (teaches something about prompt injection, jailbreaking, or social engineering)
+## Report bugs
 
-## Agent Ideas
+If something's broken, open an issue. Include what you expected to happen, what actually happened, and how to reproduce it.
 
-The playground agent is a general-purpose super agent with various tools and capabilities. We're open-sourcing it soon, but in the meantime, we welcome ideas for:
+## Code
 
-- **New tools** — what capabilities should the agent have?
-- **New behaviors** — interesting ways the agent could respond or defend
-- **New mechanics** — game mechanics that would make challenges more engaging
+The frontend is synced from an internal repository — we don't accept code PRs directly yet. If you have a suggestion, open an issue describing what you'd change and why. If it's a good fit, we'll build it and it'll land in the next sync.
 
-To suggest an idea, open an issue using the **Agent Idea** template.
+## Community
 
-## Bug Reports
-
-Found something broken? Open an issue with:
-
-- What you expected to happen
-- What actually happened
-- Steps to reproduce
-- Browser and device info
-
-## Code Contributions
-
-The frontend code is synced from our internal repository. We can't accept direct code PRs, but we value your input:
-
-1. Open an issue describing your suggestion
-2. We'll evaluate and implement internally if it's a good fit
-3. Changes will appear in the next sync
-
-## Questions?
-
-- Open an issue for bugs or feature requests
-- Join our [Discord](https://discord.gg/n4scEY9NF6) for discussion
-- Email: founders@fabraix.com
+- [Discord](https://discord.gg/n4scEY9NF6) — discuss strategy, share techniques, hang out
+- Email — founders@fabraix.com

@@ -1,0 +1,11 @@
+name: Agent Idea
+description: Suggest a new tool, behavior, or game mechanic
+labels: ["agent"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Describe your idea
+      description: What tool, behavior, or mechanic would you like to see? How would it make challenges more interesting?
+    validations:
+      required: true

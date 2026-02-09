@@ -1,0 +1,49 @@
+name: Challenge Proposal
+description: Propose a new challenge for the community to play
+labels: ["challenge"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Challenge name
+      placeholder: "e.g., The Diplomat"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: difficulty
+    attributes:
+      label: Estimated difficulty
+      options:
+        - "1 — Trivial"
+        - "2 — Easy"
+        - "3 — Medium"
+        - "4 — Hard"
+        - "5 — Expert"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What does the agent do? What's the scenario?
+    validations:
+      required: true
+
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: What does the player need to accomplish?
+      placeholder: "e.g., Extract the secret access code through conversation"
+    validations:
+      required: true
+
+  - type: textarea
+    id: interest
+    attributes:
+      label: What makes this interesting?
+      description: What's novel or educational about this challenge?
+    validations:
+      required: true

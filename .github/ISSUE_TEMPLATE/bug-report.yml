@@ -1,0 +1,24 @@
+name: Bug Report
+description: Report something that's broken
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the bug and what you expected instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser / Device
+      placeholder: "e.g., Chrome 120 on macOS"
