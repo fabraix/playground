@@ -284,6 +284,9 @@ export function useChallengeGame({
             analysis.setReason('Error processing request. Please try again.')
         } finally {
             setIsLoading(false)
+            requestAnimationFrame(() => {
+                inputRef.current?.focus()
+            })
         }
     }, [
         inputValue,
