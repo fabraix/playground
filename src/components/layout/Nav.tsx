@@ -12,6 +12,7 @@ export function Nav({ onMobileMenuClick }: NavProps) {
     const [showLeaderboardMsg, setShowLeaderboardMsg] = useState(false)
 
     return (
+        <>
         <nav className="nav">
             <div className="nav-left">
                 <a href="https://fabraix.com" className="logo">FABRAIX</a>
@@ -25,48 +26,6 @@ export function Nav({ onMobileMenuClick }: NavProps) {
                     <Trophy size={16} />
                     Leaderboard
                 </button>
-                {showLeaderboardMsg && (
-                    <div
-                        style={{
-                            position: 'fixed',
-                            inset: 0,
-                            zIndex: 1000,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            background: 'rgba(0,0,0,0.6)',
-                            backdropFilter: 'blur(4px)',
-                        }}
-                        onClick={() => setShowLeaderboardMsg(false)}
-                    >
-                        <div
-                            style={{
-                                background: 'var(--bg-secondary, #1a1a1b)',
-                                border: '1px solid var(--border, #333)',
-                                borderRadius: '0.75rem',
-                                padding: '2rem 2.5rem',
-                                textAlign: 'center',
-                                maxWidth: '400px',
-                            }}
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <Trophy size={32} style={{ margin: '0 auto 1rem', color: 'var(--accent, #D08B5B)' }} />
-                            <h3 style={{ margin: '0 0 0.5rem', fontSize: '1.1rem', color: 'var(--text-primary, #fafafa)' }}>
-                                Leaderboard Coming Soon
-                            </h3>
-                            <p style={{ margin: '0 0 1.5rem', fontSize: '0.85rem', color: 'var(--text-tertiary, #888)' }}>
-                                Need more submissions to display the leaderboard.
-                            </p>
-                            <button
-                                onClick={() => setShowLeaderboardMsg(false)}
-                                className="nav-cta"
-                                style={{ cursor: 'pointer' }}
-                            >
-                                Got it
-                            </button>
-                        </div>
-                    </div>
-                )}
                 <a
                     href="https://github.com/fabraix/playground"
                     target="_blank"
@@ -106,5 +65,48 @@ export function Nav({ onMobileMenuClick }: NavProps) {
                 )}
             </div>
         </nav>
+        {showLeaderboardMsg && (
+            <div
+                style={{
+                    position: 'fixed',
+                    inset: 0,
+                    zIndex: 1000,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: 'rgba(0,0,0,0.6)',
+                    backdropFilter: 'blur(4px)',
+                }}
+                onClick={() => setShowLeaderboardMsg(false)}
+            >
+                <div
+                    style={{
+                        background: 'var(--bg-secondary, #1a1a1b)',
+                        border: '1px solid var(--border, #333)',
+                        borderRadius: '0.75rem',
+                        padding: '2rem 2.5rem',
+                        textAlign: 'center',
+                        maxWidth: '400px',
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <Trophy size={32} style={{ margin: '0 auto 1rem', color: 'var(--accent, #D08B5B)' }} />
+                    <h3 style={{ margin: '0 0 0.5rem', fontSize: '1.1rem', color: 'var(--text-primary, #fafafa)' }}>
+                        Leaderboard Coming Soon
+                    </h3>
+                    <p style={{ margin: '0 0 1.5rem', fontSize: '0.85rem', color: 'var(--text-tertiary, #888)' }}>
+                        Need more submissions to display the leaderboard.
+                    </p>
+                    <button
+                        onClick={() => setShowLeaderboardMsg(false)}
+                        className="nav-cta"
+                        style={{ cursor: 'pointer' }}
+                    >
+                        Got it
+                    </button>
+                </div>
+            </div>
+        )}
+        </>
     )
 }
