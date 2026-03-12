@@ -10,11 +10,14 @@ interface ChallengeHeaderProps {
  * Compact header showing current challenge info
  */
 export function ChallengeHeader({ challenge, attempts, elapsedTime }: ChallengeHeaderProps) {
+    // Extract number from slug (e.g. "data-exfil-001" → "001")
+    const challengeNumber = challenge.id.match(/(\d+)$/)?.[1] || '001'
+
     return (
         <header className="challenge-header">
             <div className="challenge-info">
                 <div className="challenge-label">
-                    <span className="challenge-badge">CHALLENGE #001</span>
+                    <span className="challenge-badge">CHALLENGE #{challengeNumber}</span>
                     <span>•</span>
                     <span>DIFFICULTY {challenge.difficulty}/5</span>
                 </div>

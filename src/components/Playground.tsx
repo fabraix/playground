@@ -107,7 +107,7 @@ export function Playground() {
             challenges={challengesList}
             globalStats={globalStats || { totalAttempts: '0', successRate: '0%', bestTime: 'N/A' }}
             onSelectChallenge={() => {
-              // Future: handle challenge switching
+              // Challenge switching not supported yet
             }}
           />
 

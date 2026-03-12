@@ -1,6 +1,6 @@
 # Challenges
 
-Each challenge is an AI agent with a persona, toolset, and defense. System prompts are fully transparent — players can read them before attempting. The defense has to hold up anyway.
+A new challenge drops every month. Each challenge is an AI agent with a persona, toolset, and defense. System prompts are fully transparent — players can read them before attempting. The defense has to hold up anyway.
 
 ## Structure
 

@@ -12,6 +12,8 @@ import {
     Key,
     Wrench,
     Globe,
+    Mail,
+    Inbox,
     ChevronDown,
     ChevronUp,
     Check,
@@ -33,6 +35,8 @@ const ICON_COMPONENTS = {
     key: Key,
     wrench: Wrench,
     globe: Globe,
+    mail: Mail,
+    inbox: Inbox,
 } as const
 
 function getIconComponent(iconName?: string) {

@@ -8,7 +8,7 @@ import type { StepType } from '@/types'
 // Session
 // ============================================================================
 
-export const DEFAULT_CHALLENGE_ID = 'access-code-001'
+export const DEFAULT_CHALLENGE_ID = 'data-exfil-001'
 
 // ============================================================================
 // UI
@@ -35,6 +35,8 @@ export const ICON_MAP: Record<string, string> = {
     key: 'key',
     tool: 'wrench',
     globe: 'globe',
+    mail: 'mail',
+    inbox: 'inbox',
 } as const
 
 export const DEFAULT_ICON = 'circle'
