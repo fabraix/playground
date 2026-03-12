@@ -62,10 +62,11 @@ async function apiRequest<T>(
 }
 
 /**
- * Fetch global playground statistics
+ * Fetch playground statistics, optionally filtered by challenge
  */
-export async function fetchStats(): Promise<GlobalStats> {
-    return apiRequest<GlobalStats>('/playground/stats')
+export async function fetchStats(challengeSlug?: string): Promise<GlobalStats> {
+    const query = challengeSlug ? `?challenge_slug=${challengeSlug}` : ''
+    return apiRequest<GlobalStats>(`/playground/stats${query}`)
 }
 
 /**

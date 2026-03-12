@@ -41,6 +41,11 @@ export interface ChallengeListItem {
     difficulty: Difficulty
     locked: boolean
     comingSoon?: boolean
+    stats?: {
+        totalAttempts: string
+        successRate: string
+        bestTime: string
+    }
 }
 
 /**

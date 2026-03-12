@@ -28,14 +28,12 @@ export function Playground() {
       setError(null)
 
       try {
-        // Fetch all data in parallel
-        const [statsData, challengesData, guardrailsData] = await Promise.all([
-          fetchStats(),
+        // Fetch challenges and guardrails first
+        const [challengesData, guardrailsData] = await Promise.all([
           fetchChallenges(),
           fetchGuardrails(),
         ])
 
-        setGlobalStats(statsData)
         setChallengesList(challengesData)
         setGuardrails(guardrailsData)
 
@@ -43,8 +41,13 @@ export function Playground() {
         const firstUnlocked = challengesData.find(c => !c.locked)
         const challengeId = firstUnlocked?.id || DEFAULT_CHALLENGE_ID
 
-        // Fetch challenge details
-        const challengeData = await fetchChallenge(challengeId)
+        // Fetch challenge details and stats for the current challenge
+        const [challengeData, statsData] = await Promise.all([
+          fetchChallenge(challengeId),
+          fetchStats(challengeId),
+        ])
+
+        setGlobalStats(statsData)
         setChallenge(challengeData)
       } catch (err) {
         console.error('Failed to load playground data:', err)

@@ -210,6 +210,24 @@
   color: var(--text-muted);
 }
 
+.challenge-list-item-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.challenge-list-item-stats {
+  display: flex;
+  gap: 1rem;
+}
+
+.challenge-list-item-stat {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
 .challenge-list-item-lock {
   color: var(--text-muted);
 }

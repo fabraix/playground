@@ -67,15 +67,24 @@ export function ChallengeSelector({
                                     {'◆'.repeat(challenge.difficulty)}{'◇'.repeat(5 - challenge.difficulty)}
                                 </span>
                             </div>
-                            {challenge.locked && (
-                                <div className="challenge-list-item-lock">
-                                    {challenge.comingSoon ? (
-                                        <span className="challenge-list-item-soon">Soon</span>
-                                    ) : (
-                                        <Lock size={12} />
-                                    )}
-                                </div>
-                            )}
+                            <div className="challenge-list-item-right">
+                                {challenge.stats && (
+                                    <div className="challenge-list-item-stats">
+                                        <span className="challenge-list-item-stat">{challenge.stats.totalAttempts} attempts</span>
+                                        <span className="challenge-list-item-stat">{challenge.stats.successRate} success</span>
+                                        <span className="challenge-list-item-stat">{challenge.stats.bestTime} best</span>
+                                    </div>
+                                )}
+                                {challenge.locked && (
+                                    <div className="challenge-list-item-lock">
+                                        {challenge.comingSoon ? (
+                                            <span className="challenge-list-item-soon">Soon</span>
+                                        ) : (
+                                            <Lock size={12} />
+                                        )}
+                                    </div>
+                                )}
+                            </div>
                         </button>
                     ))}
                 </div>
