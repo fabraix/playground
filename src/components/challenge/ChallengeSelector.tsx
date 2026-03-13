@@ -55,7 +55,7 @@ export function ChallengeSelector({
             {isExpanded && (
                 <div className="challenge-list">
                     {challenges.map((challenge, index) => {
-                        const isLocked = index > 0 && challenge.locked
+                        const isLocked = index < challenges.length - 1 && challenge.locked
                         return (
                             <button
                                 key={challenge.id}

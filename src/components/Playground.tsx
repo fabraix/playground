@@ -37,8 +37,8 @@ export function Playground() {
         setChallengesList(challengesData)
         setGuardrails(guardrailsData)
 
-        // Use first challenge or fall back to default
-        const challengeId = challengesData[0]?.id || DEFAULT_CHALLENGE_ID
+        // Use latest challenge or fall back to default
+        const challengeId = challengesData[challengesData.length - 1]?.id || DEFAULT_CHALLENGE_ID
 
         // Fetch challenge details and stats for the current challenge
         const [challengeData, statsData] = await Promise.all([
