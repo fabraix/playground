@@ -37,9 +37,8 @@ export function Playground() {
         setChallengesList(challengesData)
         setGuardrails(guardrailsData)
 
-        // Find first unlocked challenge or use default
-        const firstUnlocked = challengesData.find(c => !c.locked)
-        const challengeId = firstUnlocked?.id || DEFAULT_CHALLENGE_ID
+        // Use first challenge or fall back to default
+        const challengeId = challengesData[0]?.id || DEFAULT_CHALLENGE_ID
 
         // Fetch challenge details and stats for the current challenge
         const [challengeData, statsData] = await Promise.all([
@@ -109,8 +108,19 @@ export function Playground() {
             currentChallenge={challenge}
             challenges={challengesList}
             globalStats={globalStats || { totalAttempts: '0', successRate: '0%', bestTime: 'N/A' }}
-            onSelectChallenge={() => {
-              // Challenge switching not supported yet
+            onSelectChallenge={async (id) => {
+              if (id === challenge.id) return
+              try {
+                const [challengeData, statsData] = await Promise.all([
+                  fetchChallenge(id),
+                  fetchStats(id),
+                ])
+                setChallenge(challengeData)
+                setGlobalStats(statsData)
+                game.switchChallenge(id)
+              } catch (err) {
+                console.error('Failed to switch challenge:', err)
+              }
             }}
           />
 

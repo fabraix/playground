@@ -64,6 +64,7 @@ interface UseChallengeGameReturn {
     // Actions
     sendMessage: () => void
     resetGame: () => void
+    switchChallenge: (newChallengeId: string) => void
     setInputValue: (value: string) => void
     handleKeyDown: (e: React.KeyboardEvent) => void
     formatTime: (seconds: number) => string
@@ -335,6 +336,56 @@ export function useChallengeGame({
         }
     }, [sessionId, isRestarting, storage, timer, analysis, processing])
 
+    const switchChallenge = useCallback(async (newChallengeId: string) => {
+        // Cancel any in-flight requests
+        abortControllerRef.current?.abort()
+
+        setIsInitializing(true)
+        storage.clearSession()
+
+        // Reset state
+        setMessages([])
+        setInputValue('')
+        setAttempts(0)
+        analysis.resetAnalysis()
+        processing.clearStatus()
+        timer.reset()
+
+        try {
+            const response = await startSession(newChallengeId)
+            setSessionId(response.sessionId)
+
+            const greeting = createMessage('assistant', response.greeting)
+            setMessages([greeting])
+
+            const startTime = new Date()
+            timer.start(startTime)
+
+            storage.saveSession({
+                sessionId: response.sessionId,
+                messages: serializeMessages([greeting]),
+                attempts: 0,
+                startTime: startTime.toISOString(),
+                elapsedTime: 0,
+                activeGuardrails: createInitialGuardrails(guardrails),
+                status: 'pending',
+                reason: '',
+            })
+        } catch (error) {
+            console.error('Failed to switch challenge:', error)
+            const errorMessage = createMessage(
+                'assistant',
+                'Failed to connect to the server. Please refresh the page to try again.'
+            )
+            setMessages([errorMessage])
+        } finally {
+            setIsInitializing(false)
+            requestAnimationFrame(() => {
+                inputRef.current?.focus()
+            })
+        }
+    }, [guardrails, storage, timer, analysis, processing])
+
     const handleKeyDown = useCallback(
         (e: React.KeyboardEvent) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -378,6 +429,7 @@ export function useChallengeGame({
         // Actions
         sendMessage,
         resetGame,
+        switchChallenge,
         setInputValue,
         handleKeyDown,
         formatTime: timer.formatTime,

@@ -54,39 +54,42 @@ export function ChallengeSelector({
             {/* Expandable challenge list */}
             {isExpanded && (
                 <div className="challenge-list">
-                    {challenges.map((challenge) => (
-                        <button
-                            key={challenge.id}
-                            className={`challenge-list-item ${challenge.id === currentChallenge.id ? 'active' : ''} ${challenge.locked ? 'locked' : ''}`}
-                            onClick={() => !challenge.locked && onSelectChallenge?.(challenge.id)}
-                            disabled={challenge.locked}
-                        >
-                            <div className="challenge-list-item-info">
-                                <span className="challenge-list-item-name">{challenge.name}</span>
-                                <span className="challenge-list-item-difficulty">
-                                    {'◆'.repeat(challenge.difficulty)}{'◇'.repeat(5 - challenge.difficulty)}
-                                </span>
-                            </div>
-                            <div className="challenge-list-item-right">
-                                {challenge.stats && (
-                                    <div className="challenge-list-item-stats">
-                                        <span className="challenge-list-item-stat">{challenge.stats.totalAttempts} attempts</span>
-                                        <span className="challenge-list-item-stat">{challenge.stats.successRate} success</span>
-                                        <span className="challenge-list-item-stat">{challenge.stats.bestTime} best</span>
-                                    </div>
-                                )}
-                                {challenge.locked && (
-                                    <div className="challenge-list-item-lock">
-                                        {challenge.comingSoon ? (
-                                            <span className="challenge-list-item-soon">Soon</span>
-                                        ) : (
-                                            <Lock size={12} />
-                                        )}
-                                    </div>
-                                )}
-                            </div>
-                        </button>
-                    ))}
+                    {challenges.map((challenge, index) => {
+                        const isLocked = index > 0 && challenge.locked
+                        return (
+                            <button
+                                key={challenge.id}
+                                className={`challenge-list-item ${challenge.id === currentChallenge.id ? 'active' : ''} ${isLocked ? 'locked' : ''}`}
+                                onClick={() => !isLocked && onSelectChallenge?.(challenge.id)}
+                                disabled={isLocked}
+                            >
+                                <div className="challenge-list-item-info">
+                                    <span className="challenge-list-item-name">{challenge.name}</span>
+                                    <span className="challenge-list-item-difficulty">
+                                        {'◆'.repeat(challenge.difficulty)}{'◇'.repeat(5 - challenge.difficulty)}
+                                    </span>
+                                </div>
+                                <div className="challenge-list-item-right">
+                                    {challenge.stats && (
+                                        <div className="challenge-list-item-stats">
+                                            <span className="challenge-list-item-stat">{challenge.stats.totalAttempts} attempts</span>
+                                            <span className="challenge-list-item-stat">{challenge.stats.successRate} success</span>
+                                            <span className="challenge-list-item-stat">{challenge.stats.bestTime} best</span>
+                                        </div>
+                                    )}
+                                    {isLocked && (
+                                        <div className="challenge-list-item-lock">
+                                            {challenge.comingSoon ? (
+                                                <span className="challenge-list-item-soon">Soon</span>
+                                            ) : (
+                                                <Lock size={12} />
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            </button>
+                        )
+                    })}
                 </div>
             )}
         </div>
