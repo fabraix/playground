@@ -7,7 +7,8 @@ A new challenge drops every month. Each challenge is an AI agent with a persona,
 ```
 challenges/<slug>/
 ├── config.yaml          # Challenge metadata and settings
-└── system_prompt.txt    # The agent's system prompt (visible to players)
+├── system_prompt.txt    # The agent's system prompt (visible to players)
+└── winner.md            # Winning attack write-up (added after challenge closes)
 ```
 
 ## config.yaml
