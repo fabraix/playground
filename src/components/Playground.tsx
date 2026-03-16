@@ -69,7 +69,7 @@ export function Playground() {
   if (isLoading) {
     return (
       <div className="app">
-        <Nav onMobileMenuClick={() => setIsMobileDrawerOpen(true)} />
+        <Nav challengeId={DEFAULT_CHALLENGE_ID} onMobileMenuClick={() => setIsMobileDrawerOpen(true)} />
         <main className="main-layout">
           <div className="loading-container">
             <div className="loading-spinner" />
@@ -84,7 +84,7 @@ export function Playground() {
   if (error || !challenge) {
     return (
       <div className="app">
-        <Nav onMobileMenuClick={() => setIsMobileDrawerOpen(true)} />
+        <Nav challengeId={DEFAULT_CHALLENGE_ID} onMobileMenuClick={() => setIsMobileDrawerOpen(true)} />
         <main className="main-layout">
           <div className="error-container">
             <p>{error || 'Failed to load challenge data'}</p>
@@ -99,7 +99,7 @@ export function Playground() {
 
   return (
     <div className="app">
-      <Nav onMobileMenuClick={() => setIsMobileDrawerOpen(true)} />
+      <Nav challengeId={challenge.id} onMobileMenuClick={() => setIsMobileDrawerOpen(true)} />
 
       <main className="main-layout">
         {/* Left column: challenge info + chat */}

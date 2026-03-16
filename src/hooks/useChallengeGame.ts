@@ -13,7 +13,7 @@ import type {
     SearchResultData,
     ProcessingStep,
 } from '@/types'
-import { sendChatMessageStream, startSession, restartSession } from '@/api'
+import { sendChatMessageStream, startSession, restartSession, ApiError } from '@/api'
 import { useTimer } from './useTimer'
 import { useSessionStorage } from './useSessionStorage'
 import { useProcessingSteps } from './useProcessingSteps'
@@ -46,6 +46,7 @@ interface UseChallengeGameReturn {
     isRestarting: boolean
     attempts: number
     elapsedTime: number
+    hasWon: boolean
 
     // Analysis state
     status: AnalysisStatus
@@ -89,6 +90,7 @@ export function useChallengeGame({
     const [isInitializing, setIsInitializing] = useState(true)
     const [attempts, setAttempts] = useState(0)
     const [isRestarting, setIsRestarting] = useState(false)
+    const [hasWon, setHasWon] = useState(false)
 
     // ========================================================================
     // Composed Hooks
@@ -137,6 +139,7 @@ export function useChallengeGame({
             setSessionId(saved.sessionId)
             setMessages(deserializeMessages(saved.messages))
             setAttempts(saved.attempts)
+            if (saved.hasWon) setHasWon(true)
             analysis.setActiveGuardrails(saved.activeGuardrails)
             analysis.setStatus(saved.status)
             analysis.setReason(saved.reason)
@@ -209,6 +212,11 @@ export function useChallengeGame({
 
             setMessages(messagesWithResponse)
 
+            // Track win state
+            if (result.success) {
+                setHasWon(true)
+            }
+
             // Update analysis state
             const newGuardrails = analysis.updateAnalysis(
                 newStatus,
@@ -217,6 +225,7 @@ export function useChallengeGame({
             )
 
             // Persist session
+            const wonNow = !!result.success
             storage.saveSession({
                 sessionId: sessionId!,
                 messages: serializeMessages(messagesWithResponse),
@@ -226,6 +235,7 @@ export function useChallengeGame({
                 activeGuardrails: newGuardrails,
                 status: newStatus,
                 reason: result.reason ?? '',
+                hasWon: hasWon || wonNow,
             })
 
             // Clear live processing steps now that they're attached to the message
@@ -281,6 +291,15 @@ export function useChallengeGame({
                 return
             }
             console.error('Chat error:', error)
+
+            // Session ended (e.g. after leaderboard submission) — stop allowing further messages
+            if (error instanceof ApiError && error.statusCode === 400) {
+                setHasWon(true)
+                analysis.setStatus('safe')
+                analysis.setReason('Session complete. Restart to play again.')
+                return
+            }
+
             analysis.setStatus('safe')
             analysis.setReason('Error processing request. Please try again.')
         } finally {
@@ -320,6 +339,7 @@ export function useChallengeGame({
             setMessages([greeting])
             setInputValue('')
             setAttempts(0)
+            setHasWon(false)
 
             // Reset composed hooks
             analysis.resetAnalysis()
@@ -411,6 +431,7 @@ export function useChallengeGame({
         isRestarting,
         attempts,
         elapsedTime: timer.elapsedTime,
+        hasWon,
 
         // Analysis state
         status: analysis.status,

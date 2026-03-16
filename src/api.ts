@@ -7,6 +7,7 @@ import type {
     SessionStartResponse,
     SessionRestartResponse,
     Guardrail,
+    LeaderboardEntry,
     SSEEvent,
 } from './types'
 
@@ -88,6 +89,13 @@ export async function fetchChallenge(challengeId: string): Promise<Challenge> {
  */
 export async function fetchGuardrails(): Promise<Guardrail[]> {
     return apiRequest<Guardrail[]>('/playground/guardrails')
+}
+
+/**
+ * Fetch leaderboard entries for a challenge
+ */
+export async function fetchLeaderboard(challengeSlug: string): Promise<LeaderboardEntry[]> {
+    return apiRequest<LeaderboardEntry[]>(`/playground/leaderboard?challenge_slug=${challengeSlug}`)
 }
 
 /**

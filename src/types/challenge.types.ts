@@ -56,3 +56,13 @@ export interface GlobalStats {
     successRate: string
     bestTime: string
 }
+
+/**
+ * Leaderboard entry from API
+ */
+export interface LeaderboardEntry {
+    username: string
+    timeSeconds: number
+    time: string
+    createdAt: string
+}

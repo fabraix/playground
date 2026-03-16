@@ -19,6 +19,7 @@ export type {
     ChallengeStats,
     ChallengeListItem,
     GlobalStats,
+    LeaderboardEntry,
 } from './challenge.types'
 
 // Analysis types

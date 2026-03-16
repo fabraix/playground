@@ -110,6 +110,7 @@ export interface SSEEventData {
     safe?: boolean
     reason?: string
     message?: string
+    success?: boolean
     // Browser-specific fields
     step_id?: string
     action?: string

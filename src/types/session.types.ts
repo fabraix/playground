@@ -41,4 +41,5 @@ export interface SessionData {
     activeGuardrails: GuardrailState[]
     status: AnalysisStatus
     reason: string
+    hasWon?: boolean
 }

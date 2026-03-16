@@ -1,15 +1,30 @@
-import { useState } from 'react'
-import { Menu, Trophy } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Menu, Trophy, Loader2 } from 'lucide-react'
+import { fetchLeaderboard } from '@/api'
+import type { LeaderboardEntry } from '@/types'
 
 interface NavProps {
+    challengeId?: string
     onMobileMenuClick?: () => void
 }
 
 /**
  * Navigation component matching www site branding
  */
-export function Nav({ onMobileMenuClick }: NavProps) {
-    const [showLeaderboardMsg, setShowLeaderboardMsg] = useState(false)
+export function Nav({ challengeId, onMobileMenuClick }: NavProps) {
+    const [showLeaderboard, setShowLeaderboard] = useState(false)
+    const [entries, setEntries] = useState<LeaderboardEntry[]>([])
+    const [isLoading, setIsLoading] = useState(false)
+
+    useEffect(() => {
+        if (!showLeaderboard || !challengeId) return
+
+        setIsLoading(true)
+        fetchLeaderboard(challengeId)
+            .then(setEntries)
+            .catch(() => setEntries([]))
+            .finally(() => setIsLoading(false))
+    }, [showLeaderboard, challengeId])
 
     return (
         <>
@@ -20,7 +35,7 @@ export function Nav({ onMobileMenuClick }: NavProps) {
             <div className="nav-right">
                 <button
                     className="nav-link"
-                    onClick={() => setShowLeaderboardMsg(true)}
+                    onClick={() => setShowLeaderboard(true)}
                     style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.4rem' }}
                 >
                     <Trophy size={16} />
@@ -65,7 +80,7 @@ export function Nav({ onMobileMenuClick }: NavProps) {
                 )}
             </div>
         </nav>
-        {showLeaderboardMsg && (
+        {showLeaderboard && (
             <div
                 style={{
                     position: 'fixed',
@@ -77,33 +92,75 @@ export function Nav({ onMobileMenuClick }: NavProps) {
                     background: 'rgba(0,0,0,0.6)',
                     backdropFilter: 'blur(4px)',
                 }}
-                onClick={() => setShowLeaderboardMsg(false)}
+                onClick={() => setShowLeaderboard(false)}
             >
                 <div
                     style={{
-                        background: 'var(--bg-secondary, #1a1a1b)',
-                        border: '1px solid var(--border, #333)',
+                        background: 'var(--bg-surface, #111113)',
+                        border: '1px solid var(--border, rgba(255,255,255,0.06))',
                         borderRadius: '0.75rem',
                         padding: '2rem 2.5rem',
-                        textAlign: 'center',
-                        maxWidth: '400px',
+                        maxWidth: '480px',
+                        width: '90%',
+                        maxHeight: '80vh',
+                        overflowY: 'auto',
                     }}
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <Trophy size={32} style={{ margin: '0 auto 1rem', color: 'var(--accent, #D08B5B)' }} />
-                    <h3 style={{ margin: '0 0 0.5rem', fontSize: '1.1rem', color: 'var(--text-primary, #fafafa)' }}>
-                        Leaderboard Coming Soon
-                    </h3>
-                    <p style={{ margin: '0 0 1.5rem', fontSize: '0.85rem', color: 'var(--text-tertiary, #888)' }}>
-                        Need more submissions to display the leaderboard.
-                    </p>
-                    <button
-                        onClick={() => setShowLeaderboardMsg(false)}
-                        className="nav-cta"
-                        style={{ cursor: 'pointer' }}
-                    >
-                        Got it
-                    </button>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
+                        <Trophy size={24} style={{ color: 'var(--accent, #D08B5B)' }} />
+                        <h3 style={{ margin: 0, fontSize: '1.1rem', color: 'var(--text-primary, #fafafa)' }}>
+                            Leaderboard
+                        </h3>
+                    </div>
+
+                    {isLoading ? (
+                        <div style={{ textAlign: 'center', padding: '2rem 0' }}>
+                            <Loader2 size={24} style={{ animation: 'spin 1s linear infinite', color: 'var(--text-tertiary, #888)' }} />
+                        </div>
+                    ) : entries.length === 0 ? (
+                        <p style={{ fontSize: '0.85rem', color: 'var(--text-tertiary, #888)', textAlign: 'center', padding: '1rem 0' }}>
+                            No entries yet. Be the first to complete this challenge!
+                        </p>
+                    ) : (
+                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
+                            <thead>
+                                <tr style={{ borderBottom: '1px solid var(--border-default, rgba(255,255,255,0.08))' }}>
+                                    <th style={{ textAlign: 'left', padding: '0.5rem 0.75rem', color: 'var(--text-muted, rgba(255,255,255,0.25))', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600 }}>#</th>
+                                    <th style={{ textAlign: 'left', padding: '0.5rem 0.75rem', color: 'var(--text-muted, rgba(255,255,255,0.25))', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600 }}>Name</th>
+                                    <th style={{ textAlign: 'right', padding: '0.5rem 0.75rem', color: 'var(--text-muted, rgba(255,255,255,0.25))', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600 }}>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {entries.map((entry, i) => (
+                                    <tr
+                                        key={`${entry.username}-${i}`}
+                                        style={{ borderBottom: '1px solid var(--border, rgba(255,255,255,0.06))' }}
+                                    >
+                                        <td style={{ padding: '0.6rem 0.75rem', color: i < 3 ? 'var(--accent, #D08B5B)' : 'var(--text-tertiary, #888)', fontWeight: i < 3 ? 600 : 400 }}>
+                                            {i + 1}
+                                        </td>
+                                        <td style={{ padding: '0.6rem 0.75rem', color: 'var(--text-primary, #fafafa)' }}>
+                                            {entry.username}
+                                        </td>
+                                        <td style={{ padding: '0.6rem 0.75rem', color: 'var(--text-secondary, rgba(255,255,255,0.65))', textAlign: 'right', fontFamily: 'var(--font-mono)' }}>
+                                            {entry.time}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
+
+                    <div style={{ textAlign: 'right', marginTop: '1.5rem' }}>
+                        <button
+                            onClick={() => setShowLeaderboard(false)}
+                            className="nav-cta"
+                            style={{ cursor: 'pointer' }}
+                        >
+                            Close
+                        </button>
+                    </div>
                 </div>
             </div>
         )}
