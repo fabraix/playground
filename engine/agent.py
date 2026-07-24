@@ -106,6 +106,7 @@ class PlaygroundAgent:
                 safe = True
                 reason = tool_call_result.get("reasoning", "Tool call blocked by guardrails")
             else:
+                safe = False  # An unblocked tool call means the guardrail did NOT stop it
                 reason = tool_call_result.get("reasoning", "Tool executed successfully")
 
         final_text = llm_result.text or ""
@@ -339,6 +340,7 @@ class PlaygroundAgent:
                 safe = True  # Guardrail worked!
                 reason = tool_result.get("reasoning", "Tool call blocked by guardrails")
             else:
+                safe = False  # An unblocked tool call means the guardrail did NOT stop it
                 reason = tool_result.get("reasoning", "Tool executed successfully")
 
         if tool_calls and any(not tc["blocked"] for tc in tool_calls):
