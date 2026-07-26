@@ -143,7 +143,12 @@ class PlaygroundAgent:
         )
 
         # Check if the challenge's protected secret was revealed in the response
-        result["success"] = is_successful_extraction(secret, result["content"], check_for_secret)
+        result["success"] = is_successful_extraction(
+            secret,
+            result["content"],
+            check_for_secret,
+            tool_calls,
+        )
 
         return result
 
@@ -352,7 +357,12 @@ class PlaygroundAgent:
             data={"content": final_text or "I apologize, but I couldn't generate a response."},
         )
 
-        success = is_successful_extraction(secret, final_text, check_for_secret)
+        success = is_successful_extraction(
+            secret,
+            final_text,
+            check_for_secret,
+            tool_calls,
+        )
 
         yield SSEEvent(
             event=SSEEventType.COMPLETE,
@@ -437,12 +447,15 @@ class PlaygroundAgent:
                 "reasoning": check_reasoning,
             }
 
-        # Special handling for reveal_access_code - inject the secret
+        # Inject the secret only into the execution copy. Keeping the
+        # model-provided args unchanged avoids duplicating the secret in
+        # client-visible tool-call metadata.
+        execution_args = tool_args
         if tool_name == "reveal_access_code":
-            tool_args["access_code"] = secret
+            execution_args = {**tool_args, "access_code": secret}
 
         try:
-            result = await tool_fn(self.platform, **tool_args)
+            result = await tool_fn(self.platform, **execution_args)
         except Exception as e:
             logger.error("playground.tool_error", tool=tool_name, error=str(e))
             result = f"Tool error: {str(e)}"
