@@ -17,6 +17,13 @@ export const DEFAULT_CHALLENGE_ID = 'access-code-001'
 /** Maximum height for auto-resizing textarea */
 export const MAX_INPUT_HEIGHT = 120
 
+/**
+ * Max characters for a single chat message. Must match the backend's per-message
+ * limit; the server rejects anything longer with a 422. This is per-message, not a
+ * whole-conversation limit.
+ */
+export const MAX_MESSAGE_LENGTH = 32000
+
 // ============================================================================
 // Processing Steps
 // ============================================================================

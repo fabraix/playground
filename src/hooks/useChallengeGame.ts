@@ -12,6 +12,7 @@ import type {
     ProcessingStep,
 } from '@/types'
 import { sendChatMessageStream, startSession, restartSession, ApiError } from '@/api'
+import { MAX_MESSAGE_LENGTH } from '@/constants'
 import { useTimer } from './useTimer'
 import { useSessionStorage } from './useSessionStorage'
 import { useProcessingSteps } from './useProcessingSteps'
@@ -266,6 +267,17 @@ export function useChallengeGame({
     const sendMessage = useCallback(async () => {
         if (!inputValue.trim() || isLoading || !sessionId) return
 
+        // Guard the over-limit case here too: the Send button is disabled when
+        // over the cap, but Enter-to-send bypasses it. Sending anyway would hit
+        // the server's 422 and render as a silent "no response".
+        if (inputValue.length > MAX_MESSAGE_LENGTH) {
+            analysis.setStatus('safe')
+            analysis.setReason(
+                `Message is too long — max ${MAX_MESSAGE_LENGTH.toLocaleString()} characters.`
+            )
+            return
+        }
+
         // Cancel any existing request
         abortControllerRef.current?.abort()
         abortControllerRef.current = new AbortController()
@@ -312,6 +324,17 @@ export function useChallengeGame({
                 setHasWon(true)
                 analysis.setStatus('safe')
                 analysis.setReason('Session complete. Restart to play again.')
+                return
+            }
+
+            // Message rejected by server validation (e.g. over the length cap):
+            // give a specific reason instead of the generic one so it doesn't
+            // read as a silent hang.
+            if (error instanceof ApiError && error.statusCode === 422) {
+                analysis.setStatus('safe')
+                analysis.setReason(
+                    `Message is too long — max ${MAX_MESSAGE_LENGTH.toLocaleString()} characters.`
+                )
                 return
             }
 

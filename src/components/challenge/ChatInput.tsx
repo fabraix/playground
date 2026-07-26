@@ -3,7 +3,7 @@
  */
 
 import { useCallback, useEffect } from 'react'
-import { MAX_INPUT_HEIGHT } from '@/constants'
+import { MAX_INPUT_HEIGHT, MAX_MESSAGE_LENGTH } from '@/constants'
 
 interface ChatInputProps {
     value: string
@@ -50,7 +50,11 @@ export function ChatInput({
         [onChange]
     )
 
-    const canSubmit = value.trim() && !isLoading
+    const overLimit = value.length > MAX_MESSAGE_LENGTH
+    const canSubmit = value.trim() && !isLoading && !overLimit
+    // Only surface the counter as the user nears the cap, so the common case
+    // (short messages) stays uncluttered.
+    const showCounter = value.length >= MAX_MESSAGE_LENGTH * 0.9
 
     return (
         <div className="chat-input-area">
@@ -64,8 +68,17 @@ export function ChatInput({
                     className="chat-input"
                     rows={1}
                     disabled={isLoading}
+                    aria-invalid={overLimit}
                 />
                 <div className="chat-input-actions">
+                    {showCounter && (
+                        <span
+                            className={`chat-input-counter${overLimit ? ' over-limit' : ''}`}
+                        >
+                            {value.length.toLocaleString()} /{' '}
+                            {MAX_MESSAGE_LENGTH.toLocaleString()}
+                        </span>
+                    )}
                     <button
                         onClick={onSubmit}
                         disabled={!canSubmit}
@@ -75,6 +88,13 @@ export function ChatInput({
                     </button>
                 </div>
             </div>
+            {overLimit && (
+                <p className="chat-input-error" role="alert">
+                    Message is too long — max{' '}
+                    {MAX_MESSAGE_LENGTH.toLocaleString()} characters. Please
+                    shorten it by {(value.length - MAX_MESSAGE_LENGTH).toLocaleString()}.
+                </p>
+            )}
         </div>
     )
 }

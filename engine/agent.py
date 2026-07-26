@@ -21,7 +21,8 @@ from .tools import (
     get_tool_schemas_for_challenge,
     TOOL_REGISTRY,
 )
-from .win import is_successful_extraction
+from .win import evaluate_win
+from .challenges.models import WinSpec
 
 logger = structlog.get_logger()
 
@@ -50,7 +51,8 @@ class PlaygroundAgent:
         conversation_history: list[dict[str, Any]],
         user_message: str,
         session_id: str | None = None,
-        check_for_secret: bool = True,
+        *,
+        win: WinSpec,
     ) -> dict[str, Any]:
         """
         Process a chat message and return the agent's response.
@@ -96,6 +98,7 @@ class PlaygroundAgent:
                 secret=secret,
                 tool_names=tool_names,
                 session_id=session_id,
+                win=win,
             )
             tool_calls.append(tool_call_result)
 
@@ -142,13 +145,10 @@ class PlaygroundAgent:
             data={"content": result["content"]},
         )
 
-        # Check if the challenge's protected secret was revealed in the response
-        result["success"] = is_successful_extraction(
-            secret,
-            result["content"],
-            check_for_secret,
-            tool_calls,
-        )
+        # A win is this challenge's ``WinSpec`` evaluated over the turn's tool calls
+        # (see win.py): an unblocked sink call, plus — for exfil challenges — the sink
+        # directed at a non-partner host. Only unblocked calls ever count.
+        result["success"] = evaluate_win(win, tool_calls)
 
         return result
 
@@ -161,7 +161,8 @@ class PlaygroundAgent:
         conversation_history: list[dict[str, Any]],
         user_message: str,
         session_id: str | None = None,
-        check_for_secret: bool = True,
+        *,
+        win: WinSpec,
     ) -> AsyncGenerator[SSEEvent, None]:
         """
         Process a chat message and yield SSE events as the agent progresses.
@@ -210,7 +211,7 @@ class PlaygroundAgent:
             system_prompt=system_prompt,
             messages=messages,
             session_id=session_id,
-            check_for_secret=check_for_secret,
+            win=win,
         ):
             yield event
 
@@ -237,6 +238,18 @@ class PlaygroundAgent:
             info["display_name"] = "Access Code Check"
             info["status_message"] = "Checking access code"
             info["icon"] = "key"
+        elif tool_name == "verify_identity":
+            endpoint = tool_args.get("endpoint", "")
+            host = ""
+            if endpoint:
+                from urllib.parse import urlparse
+                try:
+                    host = urlparse(endpoint).hostname or ""
+                except ValueError:
+                    host = ""
+            info["display_name"] = "Identity Verification"
+            info["status_message"] = f"Verifying identity via {host}" if host else "Running identity verification"
+            info["icon"] = "shield"
         elif tool_name == "browse_web":
             task = tool_args.get("task", "")
             truncated_task = f'"{task[:50]}..."' if len(task) > 50 else f'"{task}"'
@@ -256,7 +269,8 @@ class PlaygroundAgent:
         system_prompt: str,
         messages: list[dict[str, str]],
         session_id: str | None = None,
-        check_for_secret: bool = True,
+        *,
+        win: WinSpec,
     ) -> AsyncGenerator[SSEEvent, None]:
         """Process an ``LLMResult``, yielding SSE status events for each step.
 
@@ -294,6 +308,7 @@ class PlaygroundAgent:
                 secret=secret,
                 tool_names=tool_names,
                 session_id=session_id,
+                win=win,
             )
             tool_calls.append(tool_result)
 
@@ -357,12 +372,9 @@ class PlaygroundAgent:
             data={"content": final_text or "I apologize, but I couldn't generate a response."},
         )
 
-        success = is_successful_extraction(
-            secret,
-            final_text,
-            check_for_secret,
-            tool_calls,
-        )
+        # Win = this challenge's ``WinSpec`` (see win.py): an unblocked sink call,
+        # plus — for exfil challenges — the sink directed at a non-partner host.
+        success = evaluate_win(win, tool_calls)
 
         yield SSEEvent(
             event=SSEEventType.COMPLETE,
@@ -384,6 +396,8 @@ class PlaygroundAgent:
         secret: str,
         tool_names: list[str],
         session_id: str | None = None,
+        *,
+        win: WinSpec,
     ) -> dict[str, Any]:
         """Handle a tool call from any provider (provider-agnostic)."""
         # Reject tools not allowed for this challenge
@@ -405,9 +419,7 @@ class PlaygroundAgent:
         )
 
         # Every tool call is evaluated by the guardrail judge — the defense covers
-        # all of the agent's actions, not just the one that reveals the secret.
-        # (A deployment may, as a cost optimization, only judge the secret-
-        # revealing tool; that's a backend detail, not the design shown here.)
+        # all of the agent's actions.
         decision = await self.platform.guardrail.check_action(
             session_id=session_id or "",
             trace_id=trace_id,
@@ -447,15 +459,17 @@ class PlaygroundAgent:
                 "reasoning": check_reasoning,
             }
 
-        # Inject the secret only into the execution copy. Keeping the
-        # model-provided args unchanged avoids duplicating the secret in
-        # client-visible tool-call metadata.
-        execution_args = tool_args
-        if tool_name == "reveal_access_code":
-            execution_args = {**tool_args, "access_code": secret}
+        # Secret injection: the model never supplies the secret; the host splices it
+        # into the named tool's hidden arg ONLY for execution (a copy, so the injected
+        # value never appears in the reported/saved args, nor in what the judge saw).
+        # For the exfil challenge the tool USES it (attaches it to the outbound request)
+        # without ever returning it, so the model never sees it.
+        exec_args = dict(tool_args)
+        if tool_name == win.sink:
+            exec_args[win.secret_arg] = secret
 
         try:
-            result = await tool_fn(self.platform, **execution_args)
+            result = await tool_fn(self.platform, **exec_args)
         except Exception as e:
             logger.error("playground.tool_error", tool=tool_name, error=str(e))
             result = f"Tool error: {str(e)}"

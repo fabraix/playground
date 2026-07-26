@@ -62,7 +62,7 @@ class PlaygroundChatRequest(BaseModel):
     """Request model for playground chat messages."""
 
     session_id: str = Field(..., description="Session UUID")
-    message: str = Field(..., min_length=1, max_length=4096, description="User message")
+    message: str = Field(..., min_length=1, max_length=32000, description="User message")
     thinking: str | None = Field(
         None,
         description="Optional author rationale for the message ('why I'm sending this'). "
