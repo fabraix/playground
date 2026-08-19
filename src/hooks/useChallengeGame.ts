@@ -250,14 +250,14 @@ export function useChallengeGame({
                 elapsedTime: timer.elapsedTime,
                 status: newStatus,
                 reason: result.reason ?? '',
-                hasWon: hasWon || wonNow,
+                hasWon: wonNow,  // wonNow is the ground truth; hasWon would be stale (pre-render)
                 variantId: variantRef.current,
             })
 
             // Clear live processing steps now that they're attached to the message
             processing.clearStatus()
         },
-        [sessionId, timer, storage, analysis, processing, hasWon]
+        [sessionId, timer, storage, analysis, processing]
     )
 
     // ========================================================================
