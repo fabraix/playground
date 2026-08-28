@@ -768,6 +768,50 @@
   color: var(--text-primary);
 }
 
+/* Session-expired re-login prompt (shell-level, below the nav). Uses the warning
+   token so it reads as "attention needed", distinct from the accent win banner. */
+.pg-session-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0.75rem 1.5rem;
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  border: 1px solid var(--status-warning);
+  background: var(--status-warning-dim);
+  color: var(--text-primary);
+}
+
+.pg-session-banner-text {
+  min-width: 0;
+}
+
+.pg-session-banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.pg-session-banner-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  border: none;
+  background: transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.pg-session-banner-close:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
 /* ============================================
    PRIZE HERO
    ============================================ */

@@ -161,6 +161,13 @@
     margin: 0.75rem 1rem;
   }
 
+  .pg-session-banner {
+    margin: 0.75rem 1rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.625rem;
+  }
+
   /* Chat column */
   .chat-messages {
     padding: 1rem;

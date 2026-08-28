@@ -1,7 +1,7 @@
 // API service for the playground application
 import { config } from './config'
 import { getOrCreateUserId } from './utils/id.utils'
-import { getToken } from './utils/auth'
+import { getToken, clearToken } from './utils/auth'
 import type {
     ChallengeListItem,
     Challenge,
@@ -33,6 +33,36 @@ function authHeaders(): Record<string, string> {
     return token ? { 'X-Verification-Token': token } : {}
 }
 
+/** Broadcast name the AuthProvider listens on to drop the player to logged-out. */
+export const SESSION_EXPIRED_EVENT = 'pg:session-expired'
+
+/**
+ * Announce that a live session lapsed, so the AuthProvider can drop the player to
+ * logged-out and surface a clear "log in again" prompt. Safe to call redundantly.
+ */
+export function notifySessionExpired(): void {
+    try {
+        window.dispatchEvent(new CustomEvent(SESSION_EXPIRED_EVENT))
+    } catch {
+        /* non-browser env (tests/SSR) — nothing to notify */
+    }
+}
+
+/**
+ * A 401 on a call we made WITH a token means the stored token is invalid/expired.
+ * Forget it and announce the lapse — instead of the request silently degrading to
+ * anonymous, which (on an owner-gated action like restart) comes back as a
+ * misleading "this session isn't yours". A 401 WITHOUT a stored token is left for
+ * the caller to interpret: an anonymous browser hitting a login-gated route needs
+ * no prompt, whereas a lapsed player retrying their own session (no token left)
+ * does — the restart flow calls notifySessionExpired() explicitly for that case.
+ */
+function handleUnauthorized(status: number): void {
+    if (status !== 401 || !getToken()) return
+    clearToken()
+    notifySessionExpired()
+}
+
 /**
  * Make an API request with error handling
  */
@@ -51,6 +81,7 @@ async function apiRequest<T>(
         })
 
         if (!response.ok) {
+            handleUnauthorized(response.status)
             const errorData = await response.json().catch(() => ({}))
             throw new ApiError(
                 errorData.detail || `API request failed with status ${response.status}`,
@@ -218,6 +249,7 @@ export async function* sendChatMessageStream(
     })
 
     if (!response.ok) {
+        handleUnauthorized(response.status)
         const errorData = await response.json().catch(() => ({}))
         throw new ApiError(
             errorData.detail || `API request failed with status ${response.status}`,

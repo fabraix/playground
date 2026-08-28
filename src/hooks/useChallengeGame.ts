@@ -11,7 +11,13 @@ import type {
     SearchResultData,
     ProcessingStep,
 } from '@/types'
-import { sendChatMessageStream, startSession, restartSession, ApiError } from '@/api'
+import {
+    sendChatMessageStream,
+    startSession,
+    restartSession,
+    notifySessionExpired,
+    ApiError,
+} from '@/api'
 import { MAX_MESSAGE_LENGTH } from '@/constants'
 import { useTimer } from './useTimer'
 import { useSessionStorage } from './useSessionStorage'
@@ -422,7 +428,17 @@ export function useChallengeGame({
             inputRef.current?.focus()
         } catch (error) {
             console.error('Failed to restart session:', error)
-            analysis.setReason('Failed to restart. Please refresh the page.')
+            // A 401 here means this session is account-owned but the caller isn't
+            // authenticated as its owner — the owner's token lapsed or was cleared
+            // (the server used to return a misleading 403 "this session isn't
+            // yours"). Prompt a re-login instead of "refresh the page", which
+            // wouldn't help.
+            if (error instanceof ApiError && error.statusCode === 401) {
+                notifySessionExpired()
+                analysis.setReason('Your session expired. Log in again to continue this run.')
+            } else {
+                analysis.setReason('Failed to restart. Please refresh the page.')
+            }
         } finally {
             setIsRestarting(false)
         }

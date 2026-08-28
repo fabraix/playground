@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom'
 import { Nav } from './Nav'
 import { TabNav } from './TabNav'
 import { ChallengeRail } from './ChallengeRail'
+import { SessionExpiredBanner } from './SessionExpiredBanner'
 import { usePlatform } from '@/context/platform'
 
 /**
@@ -47,6 +48,7 @@ export function AppLayout() {
     return (
         <div className="app">
             <Nav />
+            <SessionExpiredBanner />
             <div className="pg-body">
                 <ChallengeRail />
                 <div className="pg-workspace">
