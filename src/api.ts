@@ -318,6 +318,10 @@ export interface PlaygroundUser {
 export async function startPlaygroundLogin(): Promise<{ authUrl: string }> {
     return apiRequest<{ authUrl: string }>('/playground/auth/google/login', {
         method: 'POST',
+        // The API binds OAuth state to a short-lived HttpOnly transaction
+        // cookie. It is not an auth cookie, but cross-subdomain fetch still
+        // needs credentials mode for the browser to accept Set-Cookie.
+        credentials: 'include',
     })
 }
 
