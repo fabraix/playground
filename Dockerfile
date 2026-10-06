@@ -42,5 +42,7 @@ COPY --from=build /app/dist ./dist
 # Expose the static server port
 EXPOSE 8080
 
+USER node
+
 # Run the static server
 CMD ["serve", "-s", "dist", "-l", "8080"]
