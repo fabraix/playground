@@ -67,7 +67,7 @@ class Store(Protocol):
     async def get_leaderboard_entry(self, session_id: str) -> dict[str, Any] | None: ...
     async def add_leaderboard_entry(
         self, *, session_id: str, challenge_slug: str, profile_id: str, time_seconds: int
-    ) -> dict[str, Any]: ...  # lands review_status='pending'
+    ) -> dict[str, Any]: ...  # lands as a pending entry
 
 
 # ---------------------------------------------------------------------------

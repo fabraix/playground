@@ -97,8 +97,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setSessionExpired(false)
         const { authUrl } = await startPlaygroundLogin()
         // Drop any in-flight anonymous game so the post-login session starts fresh
-        // and is stamped to this account from the first message (D1 - no upgrading
-        // an anonymous session, whose pg-player-* owner would fail the submit check).
+        // and belongs to this account from the first message.
         sessionStorage.removeItem(SESSION_STORAGE_KEY)
         window.location.href = authUrl
     }, [])

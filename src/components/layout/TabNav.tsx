@@ -21,7 +21,7 @@ const TABS: TabDef[] = [
 
 /**
  * The primary tab navigation - horizontal bottom-border underline tabs (mirrors
- * clients/app). The challenge + prize context now lives in the left rail
+ * the product app). The challenge + prize context now lives in the left rail
  * (ChallengeRail), so this is just the tabs.
  */
 export function TabNav() {

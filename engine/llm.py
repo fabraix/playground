@@ -71,7 +71,7 @@ class PlaygroundLLM:
         out: list[dict] = []
         for m in messages:
             role = m.get("role", "user")
-            # Old Gemini "model" role maps forward to "assistant".
+            # A legacy "model" role maps forward to "assistant".
             if role == "model":
                 role = "assistant"
             out.append({"role": role, "content": m.get("content", "")})

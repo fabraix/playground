@@ -1,8 +1,8 @@
 /**
- * Design tokens — matched to the Fabraix product design system (clients/app,
- * which is shadcn "new-york" + the clients/www brand palette).
+ * Design tokens — matched to the Fabraix product design system
+ * (shadcn "new-york" + the Fabraix website's brand palette).
  *
- * Principles carried over from clients/app:
+ * Principles carried over from the product app:
  *   - Ink text on a warm paper surface; thin neutral borders (#e5e5e5).
  *   - Orange (#EA580C) is a SPARING accent (active-tab underline, links, hover),
  *     never a fill. Primary buttons are near-black, not orange.
@@ -15,7 +15,7 @@
   /* Native UI (select popups, scrollbars, overscroll canvas) follows the theme. */
   color-scheme: light;
 
-  /* Rounder than clients/app — closer to clients/www (soft cards, pill buttons).
+  /* Rounder than the product app — closer to the Fabraix website (soft cards, pill buttons).
      One box radius everywhere for consistency: --radius-sm tracks --radius, so
      inputs/selects/steps round exactly like cards/panels. Buttons + badges = pill. */
   --radius: 1rem;

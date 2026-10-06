@@ -50,10 +50,9 @@ export function notifySessionExpired(): void {
 
 /**
  * A 401 on a call we made WITH a token means the stored token is invalid/expired.
- * Forget it and announce the lapse — instead of the request silently degrading to
- * anonymous, which (on an owner-gated action like restart) comes back as a
- * misleading "this session isn't yours". A 401 WITHOUT a stored token is left for
- * the caller to interpret: an anonymous browser hitting a login-gated route needs
+ * Forget it and announce the lapse instead of letting the request silently degrade
+ * to anonymous. A 401 WITHOUT a stored token is left for the caller to interpret:
+ * an anonymous browser hitting a login-gated route needs
  * no prompt, whereas a lapsed player retrying their own session (no token left)
  * does — the restart flow calls notifySessionExpired() explicitly for that case.
  */

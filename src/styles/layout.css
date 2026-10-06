@@ -43,7 +43,7 @@
   overflow: hidden;
 }
 
-/* Centered, max-width content column — mirrors clients/app's max-w-6xl. It is
+/* Centered, max-width content column — mirrors the product app's max-w-6xl. It is
    full-height so the chat view can fill it; page views scroll inside. */
 .pg-container {
   flex: 1;

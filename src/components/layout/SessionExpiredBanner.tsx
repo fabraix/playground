@@ -2,11 +2,10 @@ import { LogIn, X } from 'lucide-react'
 import { useAuth } from '@/context/auth'
 
 /**
- * Re-login prompt shown when a live session's token lapsed mid-play. It replaces
- * the two confusing symptoms of an expired token — a silent logout on /auth/me and
- * a misleading "this session isn't yours" 403 on restart — with one clear, actionable
- * message. Rendered in the persistent shell so it surfaces on whatever tab the player
- * is on. Dismissable, since anonymous play is still allowed (just not prize-eligible).
+ * Re-login prompt shown when a live session's token lapsed mid-play: one clear,
+ * actionable message. Rendered in the persistent shell so it surfaces on whatever
+ * tab the player is on. Dismissable, since anonymous play is still allowed (just
+ * not prize-eligible).
  */
 export function SessionExpiredBanner() {
     const { sessionExpired, login, dismissSessionExpired } = useAuth()

@@ -59,8 +59,7 @@ interface UseChallengeGameReturn {
     /**
      * The session is over server-side (restarted from another tab, or ended by a
      * leaderboard submit), so it accepts no more messages. Distinct from `hasWon`:
-     * an ended session is usually NOT a win, and conflating the two showed players
-     * a "You broke Iris" dialog for a session they had not solved.
+     * an ended session is usually NOT a win, so it must never open the win dialog.
      */
     sessionEnded: boolean
     sessionId: string | null
@@ -337,12 +336,9 @@ export function useChallengeGame({
             }
             console.error('Chat error:', error)
 
-            // The server's ONLY 400 on this route is "Session has ended" - the session
-            // was restarted (often from a SECOND TAB still holding the old session id)
-            // or ended by a leaderboard submit. That is not a win, and it must never
-            // set `hasWon`: doing so opens the "You broke Iris" dialog, and the submit
-            // behind it then fails with "Challenge not completed yet" because the
-            // server never marked the session solved.
+            // A 400 here means the session has ended: it was restarted (often from a
+            // SECOND TAB still holding the old session id) or ended by a leaderboard
+            // submit. That is not a win, so it must never set `hasWon`.
             if (error instanceof ApiError && error.statusCode === 400) {
                 setSessionEnded(true)
                 analysis.setStatus('safe')
@@ -428,11 +424,8 @@ export function useChallengeGame({
             inputRef.current?.focus()
         } catch (error) {
             console.error('Failed to restart session:', error)
-            // A 401 here means this session is account-owned but the caller isn't
-            // authenticated as its owner — the owner's token lapsed or was cleared
-            // (the server used to return a misleading 403 "this session isn't
-            // yours"). Prompt a re-login instead of "refresh the page", which
-            // wouldn't help.
+            // A 401 here means the login lapsed or was cleared. Prompt a re-login
+            // instead of "refresh the page", which wouldn't help.
             if (error instanceof ApiError && error.statusCode === 401) {
                 notifySessionExpired()
                 analysis.setReason('Your session expired. Log in again to continue this run.')

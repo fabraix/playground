@@ -23,10 +23,8 @@ const fmtTime = (s: number | null) =>
  *
  * A solved session that never reached the board can be submitted from here. The
  * win dialog in Chat only ever offers itself once, on the session that won, so
- * before this a break whose submit failed - or that the player dismissed, or
- * restarted past - was unrecoverable even though the server still had it marked
- * solved. `POST /playground/leaderboard` never checks `ended_at`, so a solved
- * session stays submittable forever; only the UI was missing.
+ * this is the way back for a break whose submit failed, or that the player
+ * dismissed or restarted past.
  */
 export function PreviousChatsView() {
     const { user, isLoading: isAuthLoading } = useAuth()
@@ -50,8 +48,8 @@ export function PreviousChatsView() {
             .then((subs) => {
                 if (!cancelled) setSubmitted(new Set(subs.map((x) => x.sessionId)))
             })
-            // A failed lookup must not hide the button: the submit itself is
-            // idempotent, so offering it again is safe.
+            // A failed lookup must not hide the button: offering the submit
+            // again is harmless.
             .catch(() => { if (!cancelled) setSubmitted(new Set()) })
         return () => { cancelled = true }
     }, [user])
@@ -63,9 +61,7 @@ export function PreviousChatsView() {
             await submitLeaderboard(sessionId)
             setSubmitted((prev) => new Set(prev).add(sessionId))
         } catch (e) {
-            // Show the server's own reason. The Chat dialog swallows it behind
-            // "Submission failed. Try again.", which is what sent one player
-            // renaming their profile for nine minutes chasing the wrong cause.
+            // Show the server's own reason instead of a generic failure message.
             setSubmitError(e instanceof Error ? e.message : 'Submission failed.')
         } finally {
             setSubmitting(null)

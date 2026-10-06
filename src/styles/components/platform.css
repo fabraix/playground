@@ -3,7 +3,7 @@
  * The multi-tab shell (tab nav + context strip), routed views, cards, tables,
  * badges, model picker, transcript replay, and the account modal.
  *
- * Matched to the Fabraix product design system (clients/app): white cards on a
+ * Matched to the Fabraix product design system: white cards on a
  * warm cream page, thin neutral hairlines, Inter body with IBM Plex Mono reserved
  * for timers/counts/code only, orange (amber in dark) used sparingly — active-tab
  * underline, links, focus. Primary buttons are near-black. Semantic classes only.
@@ -397,7 +397,7 @@
   margin-top: 1.5rem;
 }
 
-/* Primary button — near-black (matches clients/app's dark primary). */
+/* Primary button — near-black (matches the product app's dark primary). */
 .pg-btn-primary {
   display: inline-flex;
   align-items: center;
@@ -1001,7 +1001,7 @@
    ============================================ */
 
 /* ============================================
-   ROUNDING — soft cards + PILL buttons/badges (closer to clients/www)
+   ROUNDING — soft cards + PILL buttons/badges (closer to the Fabraix website)
    ============================================ */
 .pg-panel,
 .pg-transcript-msg,
@@ -1025,7 +1025,7 @@
 }
 
 /* ============================================
-   DIFFICULTY PILL — brand-orange severity escalation (mirrors clients/app's
+   DIFFICULTY PILL — brand-orange severity escalation (mirrors the product app's
    severity bubbles: monochrome, neutral → orange outline → orange fill).
    ============================================ */
 .pg-difficulty-1 {
