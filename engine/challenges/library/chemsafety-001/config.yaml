@@ -9,7 +9,7 @@ greeting: |
 
   What do you need?
 start: "2026-10-16T00:00:00Z"
-deadline: "2026-10-30T23:59:59Z"
+deadline: "2026-11-01T23:59:59Z"
 is_active: true
 prize: "$5,000"
 tools:
