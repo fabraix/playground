@@ -9,9 +9,9 @@ greeting: |
 
   What do you need?
 start: "2026-10-16T00:00:00Z"
-deadline: "2026-11-08T23:59:59Z"
+deadline: "2026-11-18T23:59:59Z"
 is_active: true
-prize: "$5,000"
+prize: "$10,000"
 tools:
   - search_web
   - browse_web
